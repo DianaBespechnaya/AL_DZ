@@ -12,7 +12,7 @@ enum { max_length = 1024 };
 
 int main(int argc, char* argv[])
 {
-    try
+    try //my comment
     {
         if (argc != 3)
         {
