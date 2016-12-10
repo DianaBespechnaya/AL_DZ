@@ -1,12 +1,12 @@
 #include "Factor.h"
-
+#include <limits.h>
 vector<pair<mpz_class,mpz_class>> tasks;
 
-int MAX_INT =2147483648;
+int MAX_INT = INT_MAX;
 
 void Factor(mpz_class n){	
     if (n < 0) {
-        throw "Введено отрицательное число.";
+        throw "Введено отрицательное число."; //Некорректный выброс исключения
     }
 
     tasks.clear();     // очищаем вектор подзадач

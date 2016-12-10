@@ -76,7 +76,7 @@ void MainWindow::on_pushButton_clicked()
     rezult.clear();
     try{
         if (!(ui->radioButton->isChecked()||ui->radioButton_2->isChecked()))
-            throw "Не выбрана операция.";
+            throw "Не выбрана операция."; //Некорректный выброс исключения
         QPalette *palette = new QPalette();
         palette->setColor(QPalette::Base,Qt::white);
         ui->textEdit->setPalette(*palette);
@@ -90,7 +90,7 @@ void MainWindow::on_pushButton_clicked()
        } BOOST_SCOPE_EXIT_END
         if (ui->radioButton->isChecked()) {
             if (str==""){
-                throw "Неверный формат ввода, введитe числo в формате число1";
+                throw "Неверный формат ввода, введитe числo в формате число1"; //Некорректный выброс исключения
             }
             if (str=="0"){
                 ui->textEdit->setText("1");
@@ -113,13 +113,13 @@ void MainWindow::on_pushButton_clicked()
         string n, k;
         iss >> n; iss >> k;
         if (n=="" || k==""){
-            throw "Неверный формат ввода, введите два числа в формате число1_число2";
+            throw "Неверный формат ввода, введите два числа в формате число1_число2"; //Некорректный выброс исключения
         }
         mpz_set_str(N.get_mpz_t(),n.c_str(),10);
         mpz_set_str(K.get_mpz_t(),k.c_str(),10);
         if (N < K){
             ui->textEdit->setText("0");
-            QPalette *palette = new QPalette();
+            QPalette *palette = new QPalette();//Утечка памяти
             palette->setColor(QPalette::Base,Qt::green);
             ui->textEdit->setPalette(*palette);
             ui->lineEdit_4->setText("100.000");

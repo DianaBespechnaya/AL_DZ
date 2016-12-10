@@ -17,7 +17,7 @@ CalcHistory::~CalcHistory()
 
 void CalcHistory::AddNewEntry(char* r,QString& Number) {
     std::stringstream ss(r);
-    ui->textEdit->insertPlainText(Number);
+    ui->textEdit->insertPlainText(Number); //Для окна истории целесообразно использовать неизменяемый виджет
     while(ss){
         char* temp= new char[100]();
         temp[99] ='\0';

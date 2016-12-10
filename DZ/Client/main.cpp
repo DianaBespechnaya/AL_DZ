@@ -8,7 +8,7 @@
 
 using boost::asio::ip::tcp;
 
-enum { max_length = 1024 };
+enum { max_length = 1024 };// Нет проверки на числа большей длины
 
 int main(int argc, char* argv[])
 {
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
                 delete[] request;
            } BOOST_SCOPE_EXIT_END
 
-            if (reply[0]<=57 && reply[0] > 48) {
+            if (reply[0]<=57 && reply[0] > 48) { //isdigit
                 string ch = "";
                 string st = "";
                 auto found = str.find('^');
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
            
 
             if (request[0]=='0')
-                break;
+                break;//Здесь нужно бросить исключение
         }
     }
     catch (std::exception& e)
