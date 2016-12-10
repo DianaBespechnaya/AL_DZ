@@ -1,11 +1,11 @@
 #include "binom.h"
 
 
-extern vector<pair<mpz_class,mpz_class>> tasks;
+extern vector<pair<mpz_class,mpz_class>> tasks; 
 
 void Binom(mpz_class n, mpz_class k){
     if (n < 0 || k < 0) {
-        throw "Введено отрицательное число.";
+        throw "Введено отрицательное число."; //такое себе
     }
 
     tasks.clear();

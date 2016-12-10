@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     hist = new CalcHistory;
-    connect(s.get_acc(),SIGNAL(rezultready()),this,SLOT(rezultwelldone()));
+    connect(s.get_acc(),SIGNAL(rezultready()),this,SLOT(rezultwelldone()));		//хорошо бы отделить gui
     connect(s.get_acc(),SIGNAL(col_clientchanged(int)),this,SLOT(set_new_col_client(int)));
     connect(s.get_acc(),SIGNAL(PortOK(unsigned short)),this,SLOT(set_port(unsigned short)));
     connect(s.get_acc(), SIGNAL(UpdateProcInWin(float)), this, SLOT(set_proc(float)));
@@ -90,7 +90,7 @@ void MainWindow::on_pushButton_clicked()
        } BOOST_SCOPE_EXIT_END
         if (ui->radioButton->isChecked()) {
             if (str==""){
-                throw "Неверный формат ввода, введитe числo в формате число1";
+                throw "Неверный формат ввода, введитe числo в формате число1"; //char* в исключении
             }
             if (str=="0"){
                 ui->textEdit->setText("1");

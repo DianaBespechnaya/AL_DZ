@@ -29,7 +29,7 @@ void Service::InitHandling() {
 	if (str == ""){
 		for (int i =0; i< control.size(); ++i){
 			if (control[i]!= 1)
-                str = "Все задачи на этапе решения или решены \n";
+                str = "Все задачи на этапе решения или решены \n"; //gui в сервисной части 
 		}
     }
     if (str ==""){
@@ -43,7 +43,7 @@ void Service::InitHandling() {
 void Service::OnSend(const boost::system::error_code& ec, size_t bytesTransf,int NumOfTask) {
 	if (ec) {
         //std::cout << "OnSend Error" <<endl;
-        cout << NumOfTask <<endl;
+        cout << NumOfTask <<endl;	//куда cout?
 		if (NumOfTask != -1)
 			control[NumOfTask] = 0;
 		stopHandling();

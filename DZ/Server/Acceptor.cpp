@@ -1,4 +1,4 @@
-#include "Acceptor.h"
+﻿#include "Acceptor.h"
 
 Acceptor::Acceptor(io_service &ios)
 	: m_ios(ios)
@@ -29,10 +29,10 @@ void Acceptor::onAccept(const boost::system::error_code&ec,
 	}
     ++col_client;
     emit col_clientchanged(col_client);
-	std::cout << "accepted" << std::endl;
+	std::cout << "accepted" << std::endl;		//cout куда 
 
     Service *service = new Service(sock);
-    connect(service,SIGNAL(acceptError()),this,SLOT(clientexit()));
+    connect(service,SIGNAL(acceptError()),this,SLOT(clientexit()));     //отделить от gui
     connect(service,SIGNAL(serverend()),this,SLOT(alldone()));
     connect(service,SIGNAL(ProcChanged(float)), this, SLOT(UpdateProc(float)));
 	service->InitHandling();
