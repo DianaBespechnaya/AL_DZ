@@ -10,6 +10,8 @@ using boost::asio::ip::tcp;
 
 enum { max_length = 1024 };
 
+// https://github.com/google/protobuf здесь сильно помог бы для упаковки данных в сообщения
+
 int main(int argc, char* argv[])
 {
     try
@@ -32,25 +34,29 @@ int main(int argc, char* argv[])
         using namespace std;
         for(;;){
             char reply[max_length];
-            auto buf = make_shared<boost::asio::streambuf>();
+            auto buf = make_shared<boost::asio::streambuf>(); // зачем?
             boost::asio::read_until(s, *buf, '\n');
             std::istream stream(buf.get());
-             stream.getline(reply, max_length);
-            std::cout << "Data recieve " << reply << std::endl;
+            stream.getline(reply, max_length); // получают _запрос_; отправляют -- ответ
+            std::cout << "Data recieved " << reply << std::endl; // cerr?
             string str= reply;
-            char *request = new char[max_length]();
+            char *request = new char[max_length](); // странные ()
+            // есть ли причина reply размещать на стеке, а request в куче?
 
-            BOOST_SCOPE_EXIT((request)){
+            BOOST_SCOPE_EXIT((request)){ // классно, но есть unique_ptr, а 1к можно на стеке разместить
                 delete[] request;
            } BOOST_SCOPE_EXIT_END
 
-            if (reply[0]<=57 && reply[0] > 48) {
+            if (reply[0]<=57 && reply[0] > 48) { // люто, непрозрачно, это C, не C++
+                // это же split!
                 string ch = "";
                 string st = "";
                 auto found = str.find('^');
                 ch = str.substr(0, found);
                 st = str.substr(found + 1, str.size() - found);
 
+                // это работа клиента, она может быть другой.
+                // это должен делать отдельный класс/функция, иначе нерасширяемо
                 mpz_class ch1;
                 mpz_class st1;
                 mpz_class rez;
@@ -68,15 +74,17 @@ int main(int argc, char* argv[])
                 mpz_get_str(request, 10, rez.get_mpz_t());
             }
             else {
-                request[0] = '0';
+                request[0] = '0'; // протокол слишком прост, не хватает сигнализации об ошибках
             }
 
-	           std::stringstream ss(request);
+            std::stringstream ss(request);
             while(ss){
-                char* temp= new char[100]();
+                char* temp= new char[100]; // зачем на каждой итерации это выделять?
 
+                // вынести подготовку данных к отправке в отдельную функцию?
+                // что здесь происходит?
                 ss.read(temp,100);
-                string temp_str=temp;
+                string temp_str=temp; // зачем объект нужен?
                 int length =temp_str.size();
                 if (length < 100) {
                     temp[length] = '\n';
@@ -84,17 +92,19 @@ int main(int argc, char* argv[])
                 }
                 else
                     boost::asio::write(s, boost::asio::buffer(temp,100));
+                // тут не бросаются исключения?
                 delete[] temp;
             }
-           
 
             if (request[0]=='0')
-                break;
+                break; // а сервер ждет ответа
         }
     }
-    catch (std::exception& e)
+    catch (std::exception& e) // любое исключение загасит клиента?
     {
         std::cerr << "Exception: " << e.what() << "\n";
     }
-     return 0;
+    return 0;
  }
+
+ // Резюме: немасштабируемо, трудная поддержка, неустойчиво к ошибкам в обмене данными

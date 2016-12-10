@@ -14,6 +14,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES main.cpp)
 add_executable(DZ_client_new ${SOURCE_FILES})
 
+# откуда тут берется gmp?
+# можно как-н. так: https://github.com/stevedekorte/io/blob/master/modules/FindGMP.cmake
+
 target_link_libraries(DZ_client_new
         gmp
         gmpxx
